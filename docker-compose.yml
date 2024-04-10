@@ -1,0 +1,24 @@
+services:
+  db:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./src/main/resources/bd/blueprint.sql:/docker-entrypoint-initdb.d/blueprint.sql
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB = database_aston
+      - POSTGRES_USER = postgres
+      - POSTGRES_PASSWORD = postgres
+
+  service:
+    image: tomcat
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./target:/usr/local/tomcat/webapps
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:

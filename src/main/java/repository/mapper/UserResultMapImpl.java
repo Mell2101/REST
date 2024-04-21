@@ -11,7 +11,7 @@ public class UserResultMapImpl implements UserResultMap{
         User user = new User();
 
         user.setId(Integer.valueOf(resultSet.getString("user_id")));
-        user.setUsername(resultSet.getString("user_name"));
+        user.setUserName(resultSet.getString("user_name"));
 
         return user;
     }

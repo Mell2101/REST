@@ -1,8 +1,12 @@
 CREATE TABLE users (
-    user_id varchar(50),
-    user_name varchar,
-    user_email
-        CONSTRAINT user_id PRIMARY KEY (user_id)
+    user_id varchar(36),
+    user_name varchar(50),
+    CONSTRAINT user_id PRIMARY KEY (user_id)
 );
 
-ALTER TABLE records ADD FOREIGN KEY (author_id) REFERENCES "users" (user_id);
+INSERT INTO users(user_id,user_name)
+VALUES
+    ('1', 'Bob'),
+    ('2', 'Piter'),
+    ('3', 'Alice');
+

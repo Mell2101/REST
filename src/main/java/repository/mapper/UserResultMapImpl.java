@@ -13,6 +13,7 @@ public class UserResultMapImpl implements UserResultMap{
         user.setId(Integer.valueOf(resultSet.getString("user_id")));
         user.setUserName(resultSet.getString("user_name"));
 
+
         return user;
     }
 }

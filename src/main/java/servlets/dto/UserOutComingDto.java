@@ -1,12 +1,15 @@
 package servlets.dto;
 
-public class UserOutcomingDto {
-    public UserOutcomingDto(String id, String name) {
+public class UserOutComingDto {
+    private String id;
+    private String name;
+
+    public UserOutComingDto(String id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public UserOutcomingDto() {}
+    public UserOutComingDto() {}
 
     public void setId(String id) {
         this.id = id;
@@ -19,12 +22,8 @@ public class UserOutcomingDto {
     public String getId() {
         return id;
     }
-
     public String getName() {
         return name;
     }
-    private String id;
-
-    private String name;
 
 }

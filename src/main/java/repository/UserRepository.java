@@ -1,6 +1,7 @@
 package repository;
 
 
+import model.Role;
 import model.User;
 
 import java.util.List;
@@ -11,5 +12,6 @@ public interface UserRepository {
     List<User> getAllUsers();
     User save(User user);
     User update(User user, int id);
+
 
 }

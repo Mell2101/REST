@@ -3,37 +3,38 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class User {
+public class Permission {
     private int id;
-    private String username;
-
+    private  String name;
     private List<Role> roles;
 
-    public User() {
+    public Permission(){
         this.roles = new ArrayList<>();
     }
 
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setId(int id) {
+
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<Role> getRoles() {
         return roles;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-    public String getUserName() {
-        return username;
-    }
-
-    public void setUserName(String username) {
-        this.username = username;
-    }
-
-    public int getId() {
-        return id;
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 
     public void addRole(Role role) {

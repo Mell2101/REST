@@ -2,10 +2,10 @@ package servlets.mapDir;
 
 import model.User;
 import servlets.dto.UserIncomingDto;
-import servlets.dto.UserOutcomingDto;
+import servlets.dto.UserOutComingDto;
 
 public interface UserDtoMapper {
-    UserOutcomingDto outComingUserMap(User user);
+    UserOutComingDto outComingUserMap(User user);
 
     User incomingUserMap(UserIncomingDto userIncomingDto);
 }

@@ -2,20 +2,30 @@ package servlets.mapDir;
 
 import model.User;
 import servlets.dto.UserIncomingDto;
-import servlets.dto.UserOutcomingDto;
+import servlets.dto.UserOutComingDto;
 
 public class UserDtoMapperImpl implements UserDtoMapper{
     @Override
-    public UserOutcomingDto outComingUserMap(User user) {
+    public UserOutComingDto outComingUserMap(User user) {
 
-        UserOutcomingDto userOutcomingShortDto = new UserOutcomingDto();
-        userOutcomingShortDto.setId(String.valueOf(user.getId()));
-        userOutcomingShortDto.setName(user.getUserName());
-        return userOutcomingShortDto;
+        UserOutComingDto userOutComingDto = new UserOutComingDto();
+        userOutComingDto.setId(String.valueOf(user.getId()));
+        userOutComingDto.setName(user.getUserName());
+
+
+        return userOutComingDto;
     }
 
     @Override
     public User incomingUserMap(UserIncomingDto userIncomingDto) {
-        return null;
+        if(userIncomingDto == null){
+            return null;
+        }
+
+        User user = new User();
+        user.setUserName(userIncomingDto.getUserName());
+        user.setId(userIncomingDto.getId());
+
+        return user;
     }
 }

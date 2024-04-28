@@ -2,10 +2,9 @@ package repository;
 
 import bd.ConnectionManager;
 import bd.DataBaseConnectionManager;
-import model.Role;
-import model.User;
-import repository.mapper.UserResultMap;
-import repository.mapper.UserResultMapImpl;
+import model.Permission;
+import repository.mapper.PermissionResultMap;
+import repository.mapper.PermissionResultMapImpl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,37 +13,91 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserRepositoryImpl implements UserRepository{
-    private ConnectionManager connectionManager;
-    private UserResultMap userResultMap;
+public class PermissionRepositoryImpl implements PermissionRepository{
 
-    public UserRepositoryImpl() {
-        this.userResultMap = new UserResultMapImpl();
+    private PermissionResultMap permissionResultMap;
+    private ConnectionManager connectionManager;
+
+    public PermissionRepositoryImpl() {
+        this.permissionResultMap = new PermissionResultMapImpl();
         this.connectionManager = new DataBaseConnectionManager();
     }
 
-    public void setConnectionManager(ConnectionManager connectionManager) {
-        this.connectionManager = connectionManager;
-    }
 
     @Override
-    public User getUserbyId(int id) {
+    public Permission getPermissionById(int id) {
         try(Connection connection = connectionManager.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    "SELECT * FROM users WHERE user_id = (?)"
+                    "SELECT * FROM Permission WHERE permission_id = (?)"
             ))
         {
             preparedStatement.setString(1,String.valueOf(id));
 
             ResultSet resultSet = preparedStatement.executeQuery();
-            User user = new User();
+            Permission permission = new Permission();
 
             if(resultSet.next()){
-                user = userResultMap.userMap(resultSet);
+                permission = permissionResultMap.permissionMap(resultSet);
             }
             connectionManager.closeConnection();
 
-            return user;
+            return permission;
+
+        }catch (SQLException | ClassNotFoundException e){
+            throw new RuntimeException();
+        }
+    }
+
+    @Override
+    public Permission save(Permission permission) {
+        try(Connection connection = connectionManager.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "INSERT INTO Permission VALUES (?, ?)"))
+        {
+
+            preparedStatement.setString(1, String.valueOf(permission.getId()));
+            preparedStatement.setString(2, permission.getName());
+            preparedStatement.execute();
+
+            return getPermissionById(permission.getId());
+
+        }catch (SQLException | ClassNotFoundException e){
+            throw new RuntimeException();
+        }
+    }
+
+    @Override
+    public List<Permission> getAllPermission() {
+        try(Connection connection = connectionManager.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "SELECT * FROM Permission"))
+        {
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            List<Permission> permissions = new ArrayList<>();
+
+            while (resultSet.next()){
+                permissions.add(permissionResultMap.permissionMap(resultSet));
+            }
+
+            return  permissions;
+        }catch (SQLException | ClassNotFoundException e){
+            throw new RuntimeException();
+        }
+    }
+
+    @Override
+    public Permission update(Permission permission, int id) {
+        try(Connection connection = connectionManager.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "UPDATE Permission SET permission_name = ? WHERE permission_id = ?"))
+        {
+            preparedStatement.setString(1, permission.getName());
+            preparedStatement.setString(2, String.valueOf(id));
+            preparedStatement.execute();
+
+            return getPermissionById(id);
 
         }catch (SQLException | ClassNotFoundException e){
             throw new RuntimeException();
@@ -55,7 +108,7 @@ public class UserRepositoryImpl implements UserRepository{
     public boolean deleteById(int id) {
         try(Connection connection = connectionManager.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    "DELETE FROM users WHERE user_id = (?)"
+                    "DELETE FROM Permission WHERE permission_id = (?)"
             ))
         {
             preparedStatement.setString(1, String.valueOf(id));
@@ -65,60 +118,4 @@ public class UserRepositoryImpl implements UserRepository{
             throw new RuntimeException();
         }
     }
-
-    @Override
-    public List<User> getAllUsers() {
-        try(Connection connection = connectionManager.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    "SELECT * FROM users"))
-        {
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            List<User> users = new ArrayList<>();
-            while (resultSet.next()){
-                users.add(userResultMap.userMap(resultSet));
-            }
-
-            return  users;
-        }catch (SQLException | ClassNotFoundException e){
-            throw new RuntimeException();
-        }
-    }
-
-    @Override
-    public User save(User user) {
-        try(Connection connection = connectionManager.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    "INSERT INTO users VALUES (?, ?)"))
-        {
-
-            preparedStatement.setString(1, String.valueOf(user.getId()));
-            preparedStatement.setString(2, user.getUserName());
-            preparedStatement.execute();
-
-            return getUserbyId(user.getId());
-
-        }catch (SQLException | ClassNotFoundException e){
-            throw new RuntimeException();
-        }
-    }
-
-
-    @Override
-    public User update(User user, int id) {
-        try(Connection connection = connectionManager.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    "UPDATE users SET user_name = ? WHERE user_id = ?"))
-        {
-            preparedStatement.setString(1, user.getUserName());
-            preparedStatement.setString(2, String.valueOf(id));
-            preparedStatement.execute();
-
-            return getUserbyId(id);
-        }catch (SQLException | ClassNotFoundException e){
-            throw new RuntimeException();
-        }
-    }
-
 }
